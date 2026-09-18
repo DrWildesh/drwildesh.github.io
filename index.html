@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gasanaa - Official Downloads</title>
+    <title>Neon Reflex Clicker - Official Downloads</title>
     <style>
         :root {
             --bg-color: #05050a;
@@ -61,6 +61,7 @@
             flex-direction: column;
             gap: 15px;
             margin: 30px 0;
+            min-height: 50px; /* Forces visibility during engine render */
         }
 
         /* Base Link Button Styling */
@@ -123,6 +124,7 @@
             border-left: 4px solid var(--neon-magenta);
             box-shadow: 0 0 10px rgba(255, 0, 127, 0.1);
             line-height: 1.6;
+            margin-top: 25px;
         }
 
         /* Neon Blinking & Pulsing Animations */
@@ -144,10 +146,10 @@
 <body>
 
 <div class="container">
-    <h1>Gasanaa Appstore</h1>
+    <h1>Neon Reflex Clicker</h1>
     <div class="version">System Status: Active // Version 1.0.0</div>
     
-    <!-- JavaScript will dynamically drop your links here -->
+    <!-- This container is where your links safely generate -->
     <div id="links-container"></div>
     
     <div class="instructions">
@@ -160,92 +162,71 @@
 </div>
 
 <script>
-<script>
-    // ==========================================
-    // 🕹️ CONFIGURATION AREA: MANAGING YOUR APPS
-    // ==========================================
-    
-    // 1. YOUR MAIN ACTIVE APP (Stays highlighted at the very top)
-    const primaryApp = {
-        text: "Download Neon Reflex Clicker APK",
-        url: "Neon reflex clicker.apk",
-        theme: "green", // Options: 'green', 'cyan', 'magenta'
-        isDownload: true
-    };
-
-    // 2. YOUR OTHER APPS LISTING (Add, remove, or modify your catalog here)
-    const portfolioApps = [
-        {
-            text: "Neon Reflex Clicker (Amazon Appstore)",
-            url: "https://amazon.com",
-            theme: "cyan",
-            isDownload: false
-        },
-        {
-            text: "Project 2: Space Tap Tycoon (APK Beta)",
-            url: "SpaceTapTycoonBeta.apk",
-            theme: "magenta",
-            isDownload: true
-        },
-        {
-            text: "Project 3: Cyber Dash Runner (Amazon)",
-            url: "https://amazon.com",
-            theme: "cyan",
-            isDownload: false
-        }
-        /* TO ADD A NEW APP IN THE FUTURE:
-        , {
-            text: "Project 4: App Name Here",
-            url: "your-file-or-store-link",
-            theme: "green",
-            isDownload: false
-        }
-        */
-    ];
-
-    // ==========================================
-    // ⚙️ AUTOMATED ENGINE (Do not touch below)
-    // ==========================================
-    const container = document.getElementById('links-container');
-
-    // Helper to generate styled buttons
-    function createButton(appData) {
-        const a = document.createElement('a');
-        a.href = appData.url;
-        a.innerText = appData.text;
-        a.className = `btn btn-${appData.theme}`;
+    // Make sure DOM elements are tracked instantly
+    document.addEventListener("DOMContentLoaded", function() {
         
-        if (appData.isDownload) {
-            a.setAttribute('download', '');
-        } else {
-            a.setAttribute('target', '_blank');
+        // 🛠️ CONFIGURATION BLOCK: Edit your apps and URLs here
+        const primaryApp = {
+            text: "Download Neon Reflex Clicker APK",
+            url: "Neon reflex clicker.apk",
+            theme: "green",
+            isDownload: true
+        };
+
+        const portfolioApps = [
+            {
+                text: "Neon Reflex Clicker (Amazon Appstore)",
+                url: "https://amazon.com",
+                theme: "cyan",
+                isDownload: false
+            },
+            {
+                text: "Project 2: Space Tap Tycoon (APK Beta)",
+                url: "SpaceTapTycoonBeta.apk",
+                theme: "magenta",
+                isDownload: true
+            }
+        ];
+
+        const container = document.getElementById('links-container');
+        if (!container) return;
+
+        // Button generation factory engine
+        function buildElement(data) {
+            const btn = document.createElement('a');
+            btn.href = data.url;
+            btn.innerText = data.text;
+            btn.className = `btn btn-${data.theme}`;
+            if (data.isDownload) {
+                btn.setAttribute('download', '');
+            } else {
+                btn.setAttribute('target', '_blank');
+            }
+            return btn;
         }
-        return a;
-    }
 
-    // Step A: Load the Primary Spotlight App
-    if (primaryApp) {
-        container.appendChild(createButton(primaryApp));
-    }
+        // 1. Inject Featured Main App Button
+        if (primaryApp) {
+            container.appendChild(buildElement(primaryApp));
+        }
 
-    // Step B: Inject a clean divider + subtitle if you have other portfolio apps
-    if (portfolioApps.length > 0) {
-        const divider = document.createElement('div');
-        divider.innerHTML = `
-            <hr style="border: 0; border-top: 1px dashed var(--neon-cyan); margin: 35px 0 20px 0; opacity: 0.5;">
-            <p style="color: #fff; font-weight: bold; font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 0 5px var(--neon-magenta);">
-                📡 More Applications Showcase
-            </p>
-        `;
-        container.appendChild(divider);
+        // 2. Inject Additional Apps Portfolio Section
+        if (portfolioApps && portfolioApps.length > 0) {
+            const sectionDivider = document.createElement('div');
+            sectionDivider.innerHTML = `
+                <hr style="border: 0; border-top: 1px dashed var(--neon-cyan); margin: 35px 0 20px 0; opacity: 0.5;">
+                <p style="color: #fff; font-weight: bold; font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase; text-shadow: 0 0 5px var(--neon-magenta);">
+                    📡 More Applications Showcase
+                </p>
+            `;
+            container.appendChild(sectionDivider);
 
-        // Step C: Loop and append all secondary portfolio listing elements
-        portfolioApps.forEach(app => {
-            container.appendChild(createButton(app));
-        });
-    }
+            portfolioApps.forEach(app => {
+                container.appendChild(buildElement(app));
+            });
+        }
+    });
 </script>
-
 
 </body>
 </html>
